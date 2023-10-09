@@ -1,16 +1,90 @@
 import React, { useState } from 'react'
+import {useNavigate} from "react-router-dom"
 import { LoginBg, Logo } from '../assets'
 import { LoginInput } from '../components'
 import { FaEnvelope, FaLock } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import {motion} from "framer-motion"
 import { buttonClick, fadeInOut } from '../animations';
+//i need to import getAuth and the provider used
+import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword } from "firebase/auth";
+import  {app} from "../config/firebase.config"
+import {vaidateUserJWTToken} from "../api"
 
 const Login  = () => {
   const [userEmail, setUserEmail] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
   const [password, setPassword] = useState("");
-  const  [confirmPassword, setConfirmPassswsord] = useState("")
+  const  [confirmPassword, setConfirmPassswsord] = useState("");
+
+  const firebaseAuth = getAuth(app);
+  const googleProvider = new GoogleAuthProvider();
+  const navigate = useNavigate()
+
+  const loginWithGoogle = async () => {
+    await signInWithPopup(firebaseAuth, googleProvider).then(userCred => {
+      firebaseAuth.onAuthStateChanged((cred) => {
+        if(cred){
+          cred.getIdToken().then((token) => {
+            vaidateUserJWTToken(token).then(data => {
+              console.log(data);
+            })
+            navigate("/", {replace: true})
+          })
+        }
+      })
+    })
+    
+  }
+
+  const signUpWithEmailPass = async () => {
+    if(password !== confirmPassword){
+      alert("passwords do not match");
+      return;
+    }
+    else if(userEmail === "" || password === "" || confirmPassword === ""){
+      alert("please fill in all the fields");
+      return;
+    } else{
+      setUserEmail("");
+      setPassword("");
+      setConfirmPassswsord("");
+      await createUserWithEmailAndPassword(firebaseAuth, userEmail, password).then(userCred => {
+        firebaseAuth.onAuthStateChanged((cred) => {
+          if(cred){
+            cred.getIdToken().then((token) => {
+              vaidateUserJWTToken(token).then(data => {    
+                console.log(data);
+              })
+              navigate("/", {replace: true})
+            })
+          }
+        })
+      })
+      // console.log("equal")
+    }   
+  }
+
+  const signInWithEmailPass = async  () => {
+    if(userEmail !== "" && password !== "" ){
+      await signInWithPopup(firebaseAuth, googleProvider).then(userCred => {
+        firebaseAuth.onAuthStateChanged((cred) => {
+          if(cred){
+            cred.getIdToken().then((token) => {
+              vaidateUserJWTToken(token).then(data => {
+                console.log(data);
+              });
+              navigate("/", {replace: true})
+            });
+          }
+        })
+      })
+    }
+    else{
+      // error
+    }
+
+  }
 
   return <div className='w-screen h-screen relative overflow-hidden flex'>
     {/* background image */}
@@ -38,9 +112,12 @@ const Login  = () => {
           {!isSignUp ? (<p>Don't have an account: {" "} <motion.button  className="text-red-600 hover:underline cursor-pointer bg-transparent "{...buttonClick} onClick={() => setIsSignUp(true)}>Create One</motion.button></p>) : (<p>Already have an account: {" "} <motion.button  className="text-red-600 underline cursor-pointer bg-transparent "{...buttonClick} onClick={() => setIsSignUp(false)}>SignIn here</motion.button></p>)}
 
           {/* button section */}
-         {isSignUp ?  <motion.button {...fadeInOut} className='w-full px-4 py-1 rounded-md bg-red-400 cursor-pointer text-white text-xl capitalize hover:bg-red-500 transition-all duration-150'>
+         {isSignUp ?  <motion.button {...fadeInOut} className='w-full px-4 py-1 rounded-3xl bg-red-400 cursor-pointer text-white text-xl capitalize hover:bg-red-500 transition-all duration-150'
+         onClick={(signUpWithEmailPass)}
+         >
             Sign Up
-          </motion.button> :  <motion.button {...fadeInOut} className='w-full px-4 py-1 rounded-md bg-red-400 cursor-pointer text-white text-xl capitalize hover:bg-red-500 transition-all duration-150'>
+          </motion.button> :  <motion.button {...fadeInOut} className='w-full px-4 py-1 rounded-3xl bg-red-400 cursor-pointer text-white text-xl capitalize hover:bg-red-500 transition-all duration-150'
+          onClick={(signInWithEmailPass)}>
             Sign In
           </motion.button>}
 
@@ -51,10 +128,11 @@ const Login  = () => {
           </div>
 
 
-          <motion.div {...buttonClick} className='flex items-center justify-center px-20 py-1 bg-lightOverlay backdrop-blur-md cursor-pointer rounded-3xl gap-4'>
+          <motion.div {...buttonClick} className='flex items-center justify-center px-20 py-1 bg-lightOverlay backdrop-blur-md cursor-pointer rounded-3xl gap-4'
+          onClick={loginWithGoogle}>
             <FcGoogle className="text-3xl"/>
             <p className='capitalize text-base text-headingColor'>
-              sign in with google
+            {isSignUp ? "sign up with google" : "sign in with google"}
             </p>
 
           </motion.div>
