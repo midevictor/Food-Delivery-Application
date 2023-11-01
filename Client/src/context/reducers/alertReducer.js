@@ -11,6 +11,8 @@ const alertReducer = (state = null, action) => {
 
         case "SET_WARNING":
              return action.alert
+        case "SET_NULL":
+             return action.alert
             
        default:
             return state

@@ -27,7 +27,7 @@ export const alertInfo = (message) => {
 }
 
 
-export const alertNull = () => {
+export const alertNull = (message) => {
     return {
         type: "SET_NULL",
         alert: null

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {useNavigate} from "react-router-dom"
 import { LoginBg, Logo } from '../assets'
 import { LoginInput } from '../components'
@@ -10,6 +10,9 @@ import { buttonClick, fadeInOut } from '../animations';
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword } from "firebase/auth";
 import  {app} from "../config/firebase.config"
 import {vaidateUserJWTToken} from "../api"
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserDetails } from '../context/actions/userActions';
+import { alertInfo, alertSuccess, alertWarning } from '../context/actions/alertAction';
 
 const Login  = () => {
   const [userEmail, setUserEmail] = useState("");
@@ -19,7 +22,17 @@ const Login  = () => {
 
   const firebaseAuth = getAuth(app);
   const googleProvider = new GoogleAuthProvider();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const alert = useSelector(state => state.alert);
+  // getting the user object
+  const user = useSelector(state => state.user)
+// if a user already exist, it takes the user back to the homepage after every hard refresh
+  useEffect (() => {
+    if(user){
+      navigate("/", {replace: true})
+    }
+  }, [user])
 
   const loginWithGoogle = async () => {
     await signInWithPopup(firebaseAuth, googleProvider).then(userCred => {
@@ -28,6 +41,7 @@ const Login  = () => {
           cred.getIdToken().then((token) => {
             vaidateUserJWTToken(token).then(data => {
               console.log(data);
+              dispatch(setUserDetails(data))
             })
             navigate("/", {replace: true})
           })
@@ -39,12 +53,14 @@ const Login  = () => {
 
   const signUpWithEmailPass = async () => {
     if(password !== confirmPassword){
-      alert("passwords do not match");
-      return;
+      // alert("passwords do not match");
+      // return;
+      dispatch(alertWarning("Password mismatch"));
     }
     else if(userEmail === "" || password === "" || confirmPassword === ""){
-      alert("please fill in all the fields");
-      return;
+      // alert("please fill in all the fields");
+      // return;
+      dispatch(alertInfo("Required field should not be empty"));
     } else{
       setUserEmail("");
       setPassword("");
@@ -54,7 +70,8 @@ const Login  = () => {
           if(cred){
             cred.getIdToken().then((token) => {
               vaidateUserJWTToken(token).then(data => {    
-                console.log(data);
+                // console.log(data);
+                dispatch(setUserDetails(data))
               })
               navigate("/", {replace: true})
             })
@@ -64,6 +81,10 @@ const Login  = () => {
       // console.log("equal")
     }   
   }
+// actions: getUsers, setUsers etc
+//reducers: to perform those actions
+//store: globalized store
+//dispatch
 
   const signInWithEmailPass = async  () => {
     if(userEmail !== "" && password !== "" ){
@@ -72,8 +93,10 @@ const Login  = () => {
           if(cred){
             cred.getIdToken().then((token) => {
               vaidateUserJWTToken(token).then(data => {
-                console.log(data);
+                // console.log(data);
+                dispatch(setUserDetails(data))
               });
+              dispatch(alertSuccess("Logged In Successfully"))
               navigate("/", {replace: true})
             });
           }
@@ -82,6 +105,7 @@ const Login  = () => {
     }
     else{
       // error
+      dispatch(alertWarning("Invalid username or password"));
     }
 
   }

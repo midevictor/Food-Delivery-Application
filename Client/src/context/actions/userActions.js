@@ -10,3 +10,10 @@ export const getUserDetails = () => {
         type: "GET_USER_DETAILS"
     }
 }
+
+export const setUserNull = () => {
+    return {
+        type: "SET_USER_NULL",
+        user: null,
+    }
+}
