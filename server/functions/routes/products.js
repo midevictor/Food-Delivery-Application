@@ -40,4 +40,21 @@ router.get("/all", async (req, res) => {
   })();
 });
 
+// delete a product
+// eslint-disable-next-line
+router.delete("/delete/:productId", async (req, res) => {
+  const productId = req.params.productId;
+  try {
+    await db.collection("products").doc(`/${productId}/`).delete()
+    // eslint-disable-next-line
+.then((result) => {
+          // eslint-disable-next-line
+        return res.status(200).send({success: true, data: result});
+        // eslint-disable-next-line
+      });
+  } catch (err) {
+    return res.send({success: false, msg: `Erroor: ${err}`});
+  }
+});
+
 module.exports = router;

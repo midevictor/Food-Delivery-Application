@@ -79,7 +79,7 @@ const DBNewItem = () => {
     const data = {
       product_name : itemName,
       product_category: category,
-      producy_price: price,
+      product_price: price,
       imageUrl: imageDownloadUrl
     };
     addNewProduct(data).then(res => {
