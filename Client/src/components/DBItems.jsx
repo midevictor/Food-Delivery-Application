@@ -59,7 +59,7 @@ const DBItems = () => {
             tooltip: "Delete Data",
             onClick: (event, rowData) => {
               if (
-                window.confirm("Are you sure, you want to perform this aciton")
+                window.confirm("Are you sure, you want to perform this action")
               ) 
               {
                 deleteAProduct(rowData.productId).then((res) => {

@@ -48,7 +48,15 @@ const DBHome = () => {
                   {
                     label: "Category Wise Count",
                     backgroundColor: "#f87979",
-                    data: [drinks?.length, deserts?.length, fruits?.length, rice?.length, curry?.length, bread?.length, chinese?.length],
+                    data: [
+                      drinks?.length,
+                      deserts?.length,
+                      fruits?.length,
+                      rice?.length,
+                      curry?.length,
+                      bread?.length,
+                      chinese?.length,
+                    ],
                   },
                 ],
               }}
@@ -61,11 +69,13 @@ const DBHome = () => {
             <CChart
               type="polarArea"
               data={{
-                labels: ["Orders",
-                "Delivered",
-                "Cancelled",
-                "Paid",
-                "Not Paid",],
+                labels: [
+                  "Orders",
+                  "Delivered",
+                  "Cancelled",
+                  "Paid",
+                  "Not Paid",
+                ],
                 datasets: [
                   {
                     data: [11, 16, 7, 3, 14],

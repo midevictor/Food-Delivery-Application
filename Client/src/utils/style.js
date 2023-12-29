@@ -13,3 +13,36 @@ export const statuses = [
     { id: 6, title: "Chinese", category: "chinese" },
     { id: 7, title: "Bread", category: "bread" },
   ];
+
+  export const randomData = [
+    {
+      productId: 1,
+      imageUrl: "https://firebasestorage.googleapis.com/v0/b/food-delivery-app-react.appspot.com/o/Images%2F1698374826577_Richmond%20Akonofua%20DCCA%20Payment.jpeg?alt=media&token=0d9cad83-4fa7-48ed-900d-6dac0d076cf8",
+      product_category: "deserts",
+      product_name:"bread", 
+    },
+    {
+      productId: 2,
+      imageUrl: "https://firebasestorage.googleapis.com/v0/b/food-delivery-app-react.appspot.com/o/Images%2F1698374826577_Richmond%20Akonofua%20DCCA%20Payment.jpeg?alt=media&token=0d9cad83-4fa7-48ed-900d-6dac0d076cf8",
+      product_category: "deserts",
+      product_name:"bread", 
+    },
+    {
+      productId: 3,
+      imageUrl: "https://firebasestorage.googleapis.com/v0/b/food-delivery-app-react.appspot.com/o/Images%2F1698374826577_Richmond%20Akonofua%20DCCA%20Payment.jpeg?alt=media&token=0d9cad83-4fa7-48ed-900d-6dac0d076cf8",
+      product_category: "deserts",
+      product_name:"bread", 
+    },
+    {
+      productId: 4,
+      imageUrl: "https://firebasestorage.googleapis.com/v0/b/food-delivery-app-react.appspot.com/o/Images%2F1698374826577_Richmond%20Akonofua%20DCCA%20Payment.jpeg?alt=media&token=0d9cad83-4fa7-48ed-900d-6dac0d076cf8",
+      product_category: "deserts",
+      product_name:"bread", 
+    },
+    {
+      productId: 5,
+      imageUrl: "https://firebasestorage.googleapis.com/v0/b/food-delivery-app-react.appspot.com/o/Images%2F1698374826577_Richmond%20Akonofua%20DCCA%20Payment.jpeg?alt=media&token=0d9cad83-4fa7-48ed-900d-6dac0d076cf8",
+      product_category: "deserts",
+      product_name:"bread", 
+    },
+  ]
