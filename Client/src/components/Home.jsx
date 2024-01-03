@@ -27,7 +27,7 @@ const Home = () => {
       </div>
       <div className='py-2 flex-1 items-center justify-end relative'>
         <img src={HeroBg} alt="" className='absolute top-0 right-0 md:-right-12 w-full h-420 md:w-auto md:h-650'/>
-        <div className='w-full md:w-460 ml-36 flex flex-wrap items-center gap-4 justify-center gap-y-14'>
+        <div className='w-full md:w-460 ml-36 flex flex-wrap items-center gap-4 justify-center gap-y-14 '>
           {randomData && randomData.map((data,i) => (
             <motion.div key={i} {...staggerFadeInOut(i)} className="w-32 h-36 md:h-auto md:w-190 p-4 bg-lightOverlay backdrop-blur-md rounded-3xl flex flex-col items-center justify-center drop-shadow-lg">
               <img

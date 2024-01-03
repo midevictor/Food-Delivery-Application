@@ -14,7 +14,6 @@ const HomeSlider = () => {
             </div>
         </div>
         <Slider/>
-      
     </motion.div>
   )
 }

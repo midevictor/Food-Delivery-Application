@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useSelector } from 'react-redux';
+import SliderCard from "./SliderCard"
 import "swiper/css";
 import "../assets/css/swiperStyles.css";
 import "swiper/css/bundle";
@@ -20,7 +21,7 @@ const Slider = () => {
         grabCursor={true}
         className="mySwiper"
       >
-        {fruits && fruits.map((data, i) => <SwiperSlide key = {i}>Slide 1</SwiperSlide>)}
+        {fruits && fruits.map((data, i) => <SwiperSlide key = {i}><SliderCard key ={i} data = {data} index={i}/></SwiperSlide>)}
       </Swiper>
       
     </div>
