@@ -3,7 +3,7 @@ import {Route, Routes} from "react-router-dom"
 import { Main, Login } from './containers'
 import { getAuth } from 'firebase/auth'
 import  {app} from "../src/config/firebase.config"
-import { vaidateUserJWTToken } from './api'
+import { getAllCartItems, vaidateUserJWTToken } from './api'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserDetails } from './context/actions/userActions'
 import {motion} from "framer-motion"
@@ -11,6 +11,7 @@ import { fadeInOut } from './animations'
 import { MainLoader } from './components'
 import {Alert} from "./components"
 import { Dashboard } from './containers'
+import { setCartItems } from './context/actions/cartAction'
 function App() {
   const firebaseAuth = getAuth(app);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +26,11 @@ function App() {
         cred.getIdToken().then((token) => {
           vaidateUserJWTToken(token).then(data => {
             // console.log(data);
+            if(data) {
+              getAllCartItems(data.user_id).then((items) => {
+                dispatch(setCartItems(items));
+            });
+          }
             dispatch(setUserDetails(data))
           })
         })

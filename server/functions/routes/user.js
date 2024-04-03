@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const admin = require("firebase-admin");
-let data = [];
+const data = [];
 router.get("/", (req, res) => {
   return res.send("Inside the user router");
 });

@@ -57,4 +57,80 @@ router.delete("/delete/:productId", async (req, res) => {
   }
 });
 
+// create a cart request
+router.post("/addToCart/:user_id", async (req, res) => {
+  const userId = req.params.user_id;
+  const productId = req.body.productId;
+  try {
+    // fetch the product id from the cart items
+    const doc = await db
+        .collection("cartItems")
+        .doc(`/${userId}/`)
+        .collection("items")
+        .doc(`/${productId}/`)
+        .get();
+    // if the product id exist, update
+    // else create a new product item for the cart items
+    // push to cart items as a new product
+    if (doc.data()) {
+      const quantity = doc.data().quantity + 1;
+      const updatedItem = await db
+          .collection("cartItems")
+          .doc(`/${userId}/`)
+          .collection("items")
+          .doc(`/${productId}/`)
+          .update( {quantity: quantity});
+      console.log("Updated item:", updatedItem); // Debugging
+      return res.status(200).send({success: true, data: updatedItem});
+    } else {
+      const data = {
+        productId: productId,
+        product_name: req.body.product_name,
+        product_category: req.body.product_category,
+        product_price: req.body.product_price,
+        imageUrl: req.body.imageUrl,
+        quantity: 1,
+      };
+      const addItems = await db
+          .collection("cartItems")
+          .doc(`/${userId}/`)
+          .collection("items")
+          .doc(`/${productId}/`)
+          .set(data);
+      console.log("Added item:", addItems); // Debugging
+      return res.status(200).send({success: true, data: addItems});
+    }
+  } catch (err) {
+    console.error("Error:", err); // Debugging
+    return res.send({success: false, msg: `Error: ${err}`});
+  }
+});
+
+// get all the cart items for a user
+router.get("/getCartItems/:user_id", async (req, res) => {
+  const userId = req.params.user_id;
+  (async () => {
+    try {
+      const query = db
+          .collection("cartItems")
+          .doc(`/${userId}/`)
+          .collection("items");
+      const response = [];
+
+      await query.get().then((querysnap) => {
+        const docs = querysnap.docs;
+
+        docs.map((doc) => {
+          response.push({...doc.data()});
+        });
+        return response;
+      });
+      return res.status(200).send({success: true, data: response});
+    } catch (er) {
+      return res.send({success: false, msg: `Error :,${er}`});
+    }
+  })();
+});
+
+
 module.exports = router;
